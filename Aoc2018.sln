@@ -3,9 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aoc2018", "Aoc2018\Aoc2018.csproj", "{15957A3D-ADBC-43D3-AF97-D779065EAAC6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aoc2018", "Aoc2018\Aoc2018.csproj", "{15957A3D-ADBC-43D3-AF97-D779065EAAC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aoc2018.Test", "Aoc2018.Test\Aoc2018.Test.csproj", "{31BE627D-7C3A-4525-9EE4-51732F889ED2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Aoc2018.Test", "Aoc2018.Test\Aoc2018.Test.csproj", "{31BE627D-7C3A-4525-9EE4-51732F889ED2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Source", "Source", "{DA75AC9B-71F9-4F15-967A-213B5E44C962}"
+	ProjectSection(SolutionItems) = preProject
+		Resources\Day05.txt = Resources\Day05.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

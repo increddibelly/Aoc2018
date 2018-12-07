@@ -1,4 +1,7 @@
-﻿namespace Aoc2018
+﻿using System.IO;
+using System.Reflection;
+
+namespace Aoc2018
 {
     public static class Source
     {
@@ -2785,5 +2788,8 @@
 "[1518-07-12 00:37] wakes up",
 "[1518-05-22 00:22] falls asleep",
 "[1518-06-06 23:56] Guard #3271 begins shift"};
+
+        public static string Day5 =
+            File.ReadAllText(@"C:\Repos\AOC\Aoc2018\Resources\Day05.txt");
     }
 }
