@@ -47,7 +47,7 @@ namespace Aoc2018.Test
         {
             var result = _cut.Puzzle2(Source.Day5);
             var max = result.OrderBy(x => x.Value.Length).First();
-            Assert.AreEqual(max, 1337);
+            Assert.AreEqual(max, 4053);
         }
 
         [TestCase("A", "dbCBcD")]
@@ -58,7 +58,7 @@ namespace Aoc2018.Test
         {
             var source = "dabAcCaCBAcCcaDA";
 
-            var result = _cut.Compress(toReplace, source);
+            var result = _cut.React(toReplace, source);
 
             Assert.AreEqual(expected, result);
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Aoc2018
 {
@@ -36,16 +37,16 @@ namespace Aoc2018
         public Dictionary<char, string> Puzzle2(string input)
         {
             var output = new Dictionary<char, string>();
-            for (var x = 'A'; x <= 'Z'; x++)
+            for (var x = 'Z'; x >= 'A'; x--)
             {
-                var result = Compress(x.ToString(), input);
+                var result = React(x.ToString(), input);
                 output.Add(x, result);
+                Debug.WriteLine($"{x} => {result.Length}");
             }
-
             return output;
         }
 
-        public string Compress(string replace, string input)
+        public string React(string replace, string input)
         {
             var strippedInput = Strip(replace, input);
             var result = Puzzle(strippedInput);
