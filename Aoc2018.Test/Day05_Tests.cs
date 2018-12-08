@@ -32,6 +32,7 @@ namespace Aoc2018.Test
         }
 
         [Test]
+        [Ignore("Takes too damn long")]
         public void Puzzle()
         {
             var source = Source.Day5;
@@ -43,6 +44,7 @@ namespace Aoc2018.Test
         }
 
         [Test]
+        [Ignore("Takes too damn long")]
         public void Puzzle2()
         {
             var result = _cut.Puzzle2(Source.Day5);
@@ -70,9 +72,5 @@ namespace Aoc2018.Test
             var result = _cut.Strip(input, "ABCDabcd");
             Assert.AreEqual(expected, result);
         }
-
-
-
-
     }
 }
