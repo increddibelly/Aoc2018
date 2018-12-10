@@ -77,7 +77,7 @@ namespace Aoc2018
         public int Id { get; }
         public int X { get;set; }
         public int Y { get; set; }
-        public char Marker => (char) (byte) (64 + Id);
+        public char Marker => (char) (byte) (64 + Id % 26);
 
         private Coordinate()
         {
