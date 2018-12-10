@@ -16,7 +16,6 @@ namespace Aoc2018
             foreach (var coordinate in map.MappedArea)
             {
                 if (coordinate == null) continue; // no owner
-                if (map.Markers.Any(coord => coord.X == coordinate.X && coord.Y == coordinate.Y)) continue; // don't count self
                 if (map.IsAtEdge(coordinate)) continue; // no infinite areas
                 
                 if (!sizePerArea.ContainsKey(coordinate.Id))
@@ -28,15 +27,57 @@ namespace Aoc2018
                            .ToDictionary(x => x.Key, x => x.Value);
 
         }
+
+        public List<string> CreateMap(Map map)
+        {
+            List<string> output = new List<string>();
+            
+            var header = new StringBuilder();
+            header.Append("     ");
+            header.Append(" ");
+            
+            output.Add(header.ToString());
+
+            for (var y = 0; y <= map.Height+1; y++)
+            {
+                var lineBuilder = new StringBuilder();
+                for (var x = 0; x <= map.Width+1; x++)
+                {
+                    var closest = map.MappedArea[x, y];
+                    if (closest == null)
+                        lineBuilder.Append('-');
+                    else
+                    {
+                        var letter = closest.Marker;
+                        if (closest.X == x && closest.Y == y)
+                        {
+                            lineBuilder.Append((char) ((byte)letter));
+                        } else if (map.IsAtEdge(closest))
+                        {
+                            lineBuilder.Append('~');
+                        }
+                        else
+                        {
+                            letter = (char)(letter + (byte)32); // lowercasify;
+                            lineBuilder.Append((char) ((byte)letter));
+                        }
+                    }
+                }
+                output.Add(lineBuilder.ToString());
+            }
+
+            return output;
+        }
     }
 
     public class Coordinate
     {
-        private static int IdGenerator = -1;
+        private static int IdGenerator = 0;
 
         public int Id { get; }
         public int X { get;set; }
         public int Y { get; set; }
+        public char Marker => (char) (byte) (64 + Id);
 
         private Coordinate()
         {
@@ -49,14 +90,9 @@ namespace Aoc2018
             Y = y;
         }
 
-        public int ManhattanDistance(Coordinate other)
-        {
-            return ManhattanDistance(other.X, other.Y);
-        }
-
         public int ManhattanDistance(int x, int y)
         {
-            return Math.Abs(X - x) + Math.Abs(Y - y);
+            return Math.Abs(x - X) + Math.Abs(y - Y);
         }
 
         public static Coordinate Parse(string input)
@@ -82,10 +118,14 @@ namespace Aoc2018
 
         public int Width { get; protected set; }
         public int Height {get; protected set; }
-        public int Count {get; protected set; }
 
         public bool IsAtEdge(Coordinate coord)
         {
+            if (MappedArea[0, coord.Y] == coord) return true;
+            if (MappedArea[coord.X, 0] == coord) return true;
+            if (MappedArea[Width, coord.Y] == coord) return true;
+            if (MappedArea[coord.X, Height] == coord) return true;
+            return false;
             var remainder = Markers;
 
             if (remainder.Any(x => x.X < coord.X))
@@ -118,18 +158,17 @@ namespace Aoc2018
             Markers = source;
             Width = Markers.Max(x => x.X);
             Height = Markers.Max(x => x.Y);
-            Count = Markers.Length;
             CalculateClosest();
         }
 
         private void CalculateClosest()
         {
-            MappedArea = new Coordinate[Width+1,Height+1];
-            for (var x = 0; x < Width; x++)
+            MappedArea = new Coordinate[Width+2, Height+2];
+            for (var x = 0; x < Width+2; x++)
             {
-                for (var y = 0; y < Height; y++)
+                for (var y = 0; y < Height+2; y++)
                 {
-                    MappedArea[x, y] = FindOwner(x, y);
+                    MappedArea[x, y] = FindOwnerOf(x, y);
                 }
             }
         }
@@ -140,12 +179,12 @@ namespace Aoc2018
             return new Map(source);
         }
 
-        private Coordinate FindOwner(int x, int y)
+        private Coordinate FindOwnerOf(int x, int y)
         {
             var distances = 
                 Markers.ToDictionary(m => m, m => m.ManhattanDistance(x, y))
-                    .OrderBy(m => m.Value)
-                    .ToDictionary(m => m.Key, m => m.Value);
+                       .OrderBy(m => m.Value)
+                       .ToDictionary(m => m.Key, m => m.Value);
 
             Coordinate bestMatch = null;
             var bestDistance = -1;
@@ -159,13 +198,39 @@ namespace Aoc2018
                 }
 
                 if (item.Value == bestDistance)
-                    return null; // same distance means no one wins.
+                    return null; // the list is sorted, so finding the same distance means no single distance is closest.
 
                 if (item.Value > bestDistance)
                     return bestMatch; // next item is farther away, so previous item is our winner
             }
 
             return null;
+        }
+
+        public int SumOfDistances(int x, int y)
+        {
+            return Markers.Sum(mrk => mrk.ManhattanDistance(x, y));
+        }
+
+        public int[,] GetMarkerDistances()
+        {
+            var result = new int[Width+1,Height+1];
+            for (var x = 0; x <= Width; x++)
+            {
+                for (var y = 0; y <= Height; y++)
+                {
+                    result[x, y] = SumOfDistances(x, y);
+                }
+            }
+
+            return result;
+        }
+
+        public int GetMarkerDistancesBelow(int max)
+        {
+            var markerDistances = GetMarkerDistances();
+
+            return markerDistances.Cast<int>().Count(coord => coord < max);
         }
     }
 }
