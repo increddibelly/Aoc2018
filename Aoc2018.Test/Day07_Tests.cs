@@ -157,7 +157,7 @@ namespace Aoc2018.Test
         public void CanNotRunTest()
         {
             var a = new Instruction("A");
-            var b = new Instruction("B"){ Status = Status.Blocked};
+            var b = new Instruction("B"){ Status = Status.Running};
             var c = new Instruction("C");
             var d = new Instruction("D");
             
@@ -178,5 +178,29 @@ namespace Aoc2018.Test
             Assert.AreEqual("BITRAQVSGUWKXYHMZPOCDLJNFE", result);
         }
 
+
+        [Test]
+        public void RunPuzzle2()
+        {
+            var result = _cut.Puzzle2(Source.Day7);
+            Assert.AreEqual("BTVYIWRSKMAQGZUXPHOCDLJNFE in 869 steps", result);
+        }
+
+        [Test]
+        public void RunPuzzle2Example()
+        {
+            var result = _cut.Puzzle2(_testcase, 0);
+            Assert.AreEqual("CAFBDE in 14 steps", result);
+        }
+        
+        [TestCase("A", 0, 1)]
+        [TestCase("Z", 0, 26)]
+        [TestCase("A", 60, 61)]
+        [TestCase("Z", 60, 86)]
+        public void ShouldTakeNSeconds(string id, int baseDuration, int expectedDuration)
+        {
+            var instr = new Instruction(id, baseDuration);
+            Assert.AreEqual(expectedDuration, instr.Duration);
+        }
     }
 }
